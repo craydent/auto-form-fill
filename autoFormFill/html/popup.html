@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    body {
+      height: 100px;
+    }
+
+    .logo {
+      top: 0;
+      left: 0;
+      position: absolute;
+      height: 116px;
+      width: 200px;
+      background-image: url('../images/bg.png');
+      background-repeat: no-repeat;
+      background-position-y: 10px;
+      background-position-x: 60px;
+      opacity: 0.5;
+      z-index: -1;
+    }
+
+    .main {
+      font-size: 13px;
+      width: 200px;
+      padding-top: 1px;
+    }
+
+    button {
+      height: 30px;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .checkmark {
+      position: absolute;
+    }
+
+    .checkmark img {
+      position: relative;
+      width: 70px;
+      margin: 10px;
+      left: 60px;
+    }
+
+    .hide {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="logo"></div>
+  <div class="checkmark hide">
+    <img src="../images/check.png" />
+  </div>
+  <div class="main">
+    <p>Generate URL from form data</p>
+    <button id="btnGenerate">Copy to Clipboard</button>
+
+  </div>
+</body>
+<script src="../scripts/popup.js"></script>
+
+</html>
