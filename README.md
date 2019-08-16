@@ -17,7 +17,7 @@ The `Copy to Clipboard` will generate a URL based on the inputs with an `id` att
 
 There is a `affaction.cssSelector` and `affdelay` syntax you can use to perform basic actions on elements.  Make sure that your query key and value are url encoded with `encodeURIComponent`.
 
-The `affdelay` is the delay between actions being performed (default is 100ms and the first action will execute without a delay).
+The `affdelay` is the delay between actions being performed (default is 0ms and the first action will execute without a delay).
 
 Example for css selector `[data-attr="attribute"]`: 
 
