@@ -4,29 +4,29 @@ function fillElements() {
     query = query.replace(/^\?(.*)/, '$1');
     var keyVal = query.split('&');
     var actionCount = 0;
-    var delay = 100;
+    var delay = 0;
     var delayRegex = /.*?affdelay=(\d*)?.*/;
     if (delayRegex.test(query)) {
-      delay = parseInt(query.replace(delayRegex, "$1")) || delay
+      delay = parseInt(query.replace(delayRegex, "$1")) || delay;
     }
-    for (var i = 0, len = keyVal.length; i < len; i++) {
-      var parts = keyVal[i].split('=');
-      let key = decodeURIComponent(parts[0]);
-      let value = parts[1];
-      if (key.startsWith("affaction.")) {
-        key = key.replace("affaction.", "");
-        setTimeout(function () {
+    for (let i = 0, len = keyVal.length; i < len; i++) {
+      let parts = keyVal[i].split('=');
+      setTimeout(function () {
+        let key = decodeURIComponent(parts[0]);
+        let value = parts[1];
+        if (key.startsWith("affaction.")) {
+          key = key.replace("affaction.", "");
           let el = document.getElementById(key) || document.querySelector(key);
           el && el[value]();
-        }, delay * actionCount++);
-      } else {
-        try {
-          let el = document.getElementById(key) || document.querySelector(key);
-          if (el && el.nodeName && el.nodeName.toLowerCase() == "input") {
-            el.value = decodeURIComponent(value);
-          }
-        } catch (e) { }
-      }
+        } else {
+          try {
+            let el = document.getElementById(key) || document.querySelector(key);
+            if (el && el.value !== undefined) {
+              el.value = decodeURIComponent(value);
+            }
+          } catch (e) { }
+        }
+      }, delay * actionCount++);
     }
   }
 }
