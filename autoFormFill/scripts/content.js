@@ -3,15 +3,22 @@ function fillElements() {
   if (query) {
     query = query.replace(/^\?(.*)/, '$1');
     var keyVal = query.split('&');
+    var actionCount = 0;
+    var delay = 100;
+    var delayRegex = /.*?affdelay=(\d*)?.*/;
+    if (delayRegex.test(query)) {
+      delay = parseInt(query.replace(delayRegex, "$1")) || delay
+    }
     for (var i = 0, len = keyVal.length; i < len; i++) {
       var parts = keyVal[i].split('=');
       let key = decodeURIComponent(parts[0]);
       let value = parts[1];
-      debugger;
       if (key.startsWith("affaction.")) {
         key = key.replace("affaction.", "");
-        let el = document.getElementById(key) || document.querySelector(key);
-        el && el[value]();
+        setTimeout(function () {
+          let el = document.getElementById(key) || document.querySelector(key);
+          el && el[value]();
+        }, delay * actionCount++);
       } else {
         try {
           let el = document.getElementById(key) || document.querySelector(key);
