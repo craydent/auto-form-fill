@@ -15,9 +15,11 @@ The `Populate` button will re-populate all items on the current page state.
 
 The `Copy to Clipboard` will generate a URL based on the inputs with an `id` attribute.
 
-There is a `affaction.cssSelector` syntax you can use to perform basic actions on elements.
+There is a `affaction.cssSelector` syntax you can use to perform basic actions on elements.  Make sure that your query key and value are url encoded with `encodeURIComponent`.
 
-ex: `?affaction.[data-attr="attribute"]=click` -> (This will essentially do a `document.querySelector('[data-attr="attribute"]').click()`)
+Example for css selector `[data-attr="attribute"]`: 
+
+`http://example.com?affaction.%5Bdata-attr%3D"attribute""%5D=click` -> (This will essentially do a `document.querySelector('[data-attr="attribute"]').click()`)
 
 ## Limitations:
 Since the data is stored in the URL, standard URL lengths apply.
