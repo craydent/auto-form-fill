@@ -6,9 +6,19 @@ function fillElements() {
     for (var i = 0, len = keyVal.length; i < len; i++) {
       var parts = keyVal[i].split('=');
       let key = decodeURIComponent(parts[0]);
-      let el = document.getElementById(key);
-      if (el && el.nodeName && el.nodeName.toLowerCase() == "input") {
-        el.value = decodeURIComponent(parts[1]);
+      let value = parts[1];
+      debugger;
+      if (key.startsWith("affaction.")) {
+        key = key.replace("affaction.", "");
+        let el = document.getElementById(key) || document.querySelector(key);
+        el && el[value]();
+      } else {
+        try {
+          let el = document.getElementById(key) || document.querySelector(key);
+          if (el && el.nodeName && el.nodeName.toLowerCase() == "input") {
+            el.value = decodeURIComponent(value);
+          }
+        } catch (e) { }
       }
     }
   }
