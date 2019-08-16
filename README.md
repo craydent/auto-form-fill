@@ -15,7 +15,9 @@ The `Populate` button will re-populate all items on the current page state.
 
 The `Copy to Clipboard` will generate a URL based on the inputs with an `id` attribute.
 
-There is a `affaction.cssSelector` syntax you can use to perform basic actions on elements.  Make sure that your query key and value are url encoded with `encodeURIComponent`.
+There is a `affaction.cssSelector` and `affdelay` syntax you can use to perform basic actions on elements.  Make sure that your query key and value are url encoded with `encodeURIComponent`.
+
+The `affdelay` is the delay between actions being performed (default is 100ms and the first action will execute without a delay).
 
 Example for css selector `[data-attr="attribute"]`: 
 
