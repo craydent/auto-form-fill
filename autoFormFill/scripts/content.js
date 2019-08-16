@@ -1,16 +1,20 @@
-var query = window.location.search;
-if (query) {
-  query = query.replace(/^\?(.*)/, '$1');
-  var keyVal = query.split('&');
-  for (var i = 0, len = keyVal.length; i < len; i++) {
-    var parts = keyVal[i].split('=');
-    let key = decodeURIComponent(parts[0]);
-    let el = document.getElementById(key);
-    if (el && el.nodeName && el.nodeName.toLowerCase() == "input") {
-      el.value = decodeURIComponent(parts[1]);
+function fillElements() {
+  var query = window.location.search;
+  if (query) {
+    query = query.replace(/^\?(.*)/, '$1');
+    var keyVal = query.split('&');
+    for (var i = 0, len = keyVal.length; i < len; i++) {
+      var parts = keyVal[i].split('=');
+      let key = decodeURIComponent(parts[0]);
+      let el = document.getElementById(key);
+      if (el && el.nodeName && el.nodeName.toLowerCase() == "input") {
+        el.value = decodeURIComponent(parts[1]);
+      }
     }
   }
 }
+
+fillElements();
 
 function generateURLFromDOMForAutoFormFill() {
   var inputs = document.querySelectorAll("input");
@@ -41,8 +45,12 @@ function generateURLFromDOMForAutoFormFill() {
   return ta.value;
 }
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.action == "generateURLFromDOMForAutoFormFill")
+  if (request.action == "generateURLFromDOMForAutoFormFill") {
     sendResponse({ url: generateURLFromDOMForAutoFormFill() });
-  else
+  } else if (request.action == "populateFromURL") {
+    fillElements();
     sendResponse({});
+  } else {
+    sendResponse({});
+  }
 });
