@@ -45,25 +45,50 @@ function init() {
     fillElements();
   }
 }
-init();
+function getSelector(el, tail) {
+  tail = tail || "";
+  if (el.id && !containsUUID(el.id)) {
+    return tail ? `#${el.id + tail}` : el.id;
+  }
+  debugger;
+  for (let attr in el) {
+    if (attr == "className") { attr = "class"; }
+
+    let value = el.getAttribute(attr);
+    if (!value || containsUUID(value) || attr == "value") { continue; }
+
+    let selector = `[${attr}="${value}"] ${tail}`;
+    if (document.querySelectorAll(selector).length === 1) {
+      return selector;
+    }
+  }
+  if (!el.parentElement) { return null; }
+  return getSelector(el.parentElement, ` ${el.tagName.toLowerCase() + tail}`);
+}
+function containsUUID(text) {
+  return /[a-fA-F0-9]{8,}-[a-fA-F0-9]{4,}-[a-fA-F0-9]{4,}-[a-fA-F0-9]{4,}-[a-fA-F0-9]{12,}/.test(text);
+}
 function generateURLFromDOMForAutoFormFill() {
   var inputs = document.querySelectorAll("input");
   var values = [];
   for (var i = 0, len = inputs.length; i < len; i++) {
     var input = inputs[i];
-    if (!input.value || !input.id || input.type == "hidden") {
+    if (!input.value || input.type == "hidden") {
       continue;
     }
-    values.push(encodeURIComponent(input.id) + "=" + encodeURIComponent(input.value));
+    var selector = getSelector(input);
+    if (selector) {
+      values.push(`${encodeURIComponent(selector)}=${encodeURIComponent(input.value)}`);
+    }
 
   }
   var formquery = values.join('&');
 
   var query = window.location.query || "";
   if (query && query.length > 1) {
-    query += "&" + formquery;
+    query += `&${formquery}`;
   } else if (!query && formquery) {
-    query = "?" + formquery;
+    query = `?${formquery}`;
   }
   var ta = document.createElement('textarea');
   ta.value = window.location.origin + window.location.pathname + query + window.location.hash;
@@ -84,3 +109,4 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     sendResponse({});
   }
 });
+init();
