@@ -1,38 +1,48 @@
+var query = window.location.search;
 function fillElements() {
-  var query = window.location.search;
-  if (query) {
-    query = query.replace(/^\?(.*)/, '$1');
-    var keyVal = query.split('&');
-    var actionCount = 0;
-    var delay = 0;
-    var delayRegex = /.*?affdelay=(\d*)?.*/;
-    if (delayRegex.test(query)) {
-      delay = parseInt(query.replace(delayRegex, "$1")) || delay;
-    }
-    for (let i = 0, len = keyVal.length; i < len; i++) {
-      let parts = keyVal[i].split('=');
-      setTimeout(function () {
-        let key = decodeURIComponent(parts[0]);
-        let value = parts[1];
-        if (key.startsWith("affaction.")) {
-          key = key.replace("affaction.", "");
+  query = query.replace(/^\?(.*)/, '$1');
+  var keyVal = query.split('&');
+  var actionCount = 0;
+  var delay = 0;
+  var delayRegex = /.*?affdelay=(\d*)?.*/;
+  if (delayRegex.test(query)) {
+    delay = parseInt(query.replace(delayRegex, "$1")) || delay;
+  }
+  for (let i = 0, len = keyVal.length; i < len; i++) {
+    let parts = keyVal[i].split('=');
+    setTimeout(function () {
+      let key = decodeURIComponent(parts[0]);
+      let value = parts[1];
+      if (key.startsWith("affaction.")) {
+        key = key.replace("affaction.", "");
+        let el = document.getElementById(key) || document.querySelector(key);
+        el && el[value]();
+      } else {
+        try {
           let el = document.getElementById(key) || document.querySelector(key);
-          el && el[value]();
-        } else {
-          try {
-            let el = document.getElementById(key) || document.querySelector(key);
-            if (el && el.value !== undefined) {
-              el.value = decodeURIComponent(value);
-            }
-          } catch (e) { }
-        }
-      }, delay * actionCount++);
-    }
+          if (el && el.value !== undefined) {
+            el.value = decodeURIComponent(value);
+          }
+        } catch (e) { }
+      }
+    }, delay * actionCount++);
   }
 }
+function init() {
+  var initDelayRegex = /.*?affinitdelay=(\d*)?.*/;
 
-fillElements();
-
+  if (query) {
+    var initDelay = 0;
+    if (initDelayRegex.test(query)) {
+      initDelay = parseInt(query.replace(initDelayRegex, "$1")) || initDelay;
+      if (initDelay) {
+        return setTimeout(fillElements, initDelay);
+      }
+    }
+    fillElements();
+  }
+}
+init();
 function generateURLFromDOMForAutoFormFill() {
   var inputs = document.querySelectorAll("input");
   var values = [];
