@@ -1,4 +1,5 @@
 var query = window.location.search;
+var $d = document;
 function fillElements() {
   query = query.replace(/^\?(.*)/, '$1');
   var keyVal = query.split('&');
@@ -15,14 +16,14 @@ function fillElements() {
       let value = decodeURIComponent(parts[1]);
       if (key.startsWith("affaction.")) {
         key = key.replace("affaction.", "");
-        let el = document.getElementById(key) || document.querySelector(key);
+        let el = $d.getElementById(key) || $d.querySelector(key);
         el && el[value]();
       } else {
         try {
-          let el = document.getElementById(key) || document.querySelector(key);
+          let el = $d.getElementById(key) || do$$d.querySelector(key);
           if (el && el.value !== undefined) {
             el.value = value;
-            var evt = document.createEvent("Events");
+            var evt = $d.createEvent("Events");
             evt.initEvent("change", true, true);
             el.dispatchEvent(evt);
           }
@@ -50,7 +51,6 @@ function getSelector(el, tail) {
   if (el.id && !containsUUID(el.id)) {
     return tail ? `#${el.id + tail}` : el.id;
   }
-  debugger;
   for (let attr in el) {
     if (attr == "className") { attr = "class"; }
 
@@ -58,7 +58,7 @@ function getSelector(el, tail) {
     if (!value || containsUUID(value) || attr == "value") { continue; }
 
     let selector = `[${attr}="${value}"] ${tail}`;
-    if (document.querySelectorAll(selector).length === 1) {
+    if ($d.querySelectorAll(selector).length === 1) {
       return selector;
     }
   }
@@ -69,7 +69,7 @@ function containsUUID(text) {
   return /[a-fA-F0-9]{8,}-[a-fA-F0-9]{4,}-[a-fA-F0-9]{4,}-[a-fA-F0-9]{4,}-[a-fA-F0-9]{12,}/.test(text);
 }
 function generateURLFromDOMForAutoFormFill() {
-  var inputs = document.querySelectorAll("input");
+  var inputs = $d.querySelectorAll("input");
   var values = [];
   for (var i = 0, len = inputs.length; i < len; i++) {
     var input = inputs[i];
@@ -90,13 +90,13 @@ function generateURLFromDOMForAutoFormFill() {
   } else if (!query && formquery) {
     query = `?${formquery}`;
   }
-  var ta = document.createElement('textarea');
+  var ta = $d.createElement('textarea');
   ta.value = window.location.origin + window.location.pathname + query + window.location.hash;
   ta.id = "copy";
-  document.body.appendChild(ta);
+  $d.body.appendChild(ta);
   ta.select();
-  document.execCommand("copy");
-  document.body.removeChild(ta);
+  $d.execCommand("copy");
+  $d.body.removeChild(ta);
   return ta.value;
 }
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
