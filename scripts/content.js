@@ -12,7 +12,7 @@ function fillElements() {
     let parts = keyVal[i].split('=');
     setTimeout(function () {
       let key = decodeURIComponent(parts[0]);
-      let value = parts[1];
+      let value = decodeURIComponent(parts[1]);
       if (key.startsWith("affaction.")) {
         key = key.replace("affaction.", "");
         let el = document.getElementById(key) || document.querySelector(key);
@@ -21,7 +21,10 @@ function fillElements() {
         try {
           let el = document.getElementById(key) || document.querySelector(key);
           if (el && el.value !== undefined) {
-            el.value = decodeURIComponent(value);
+            el.value = value;
+            var evt = document.createEvent("Events");
+            evt.initEvent("change", true, true);
+            el.dispatchEvent(evt);
           }
         } catch (e) { }
       }
