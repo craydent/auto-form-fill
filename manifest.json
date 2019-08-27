@@ -1,6 +1,6 @@
 {
   "name": "Auto Form Fill",
-  "version": "1.0",
+  "version": "1.1",
   "manifest_version": 2,
   "description": "Used primarily used for testing allowing forms to be fill automatically based on the query string.",
   "content_scripts": [
